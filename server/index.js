@@ -85,7 +85,6 @@ const wss = new WebSocketServer({ server });
 
 wss.on("connection", (ws) => {
   let first = true;
-  console.log("client connected");
 
   ws.addEventListener("message", async (message) => {
     const messageData = JSON.parse(message.data);
