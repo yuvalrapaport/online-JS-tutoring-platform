@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Ace Editor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <style>
+      #editor {
+        height: 500px;
+        width: 80%;
+        margin: 0 auto;
+      }
+      #home-button {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #1c87c9;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="editor"></div>
+    <button id="home-button" onclick="handleHomeClick()">Home</button>
+    <script id="scriptneed" aria-placeholder="URL">
+      let numConnect = 0;
+      const socket = new WebSocket(window.location.origin.replace(/^http/, 'ws'));
+      const editor = ace.edit("editor");
+      editor.setTheme("ace/theme/twilight");
+      editor.session.setMode("ace/mode/javascript");
+
+      socket.addEventListener("open", (event) => {
+        console.log("Connected to server");
+        socket.send(JSON.stringify({ type: "msg", data: document.getElementById("scriptneed").ariaPlaceholder }));
+        
+      });
+
+      socket.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+        if (data.firstMsg) {
+          numConnect = data.numConnect;
+          if (numConnect === 1) {
+            editor.setReadOnly(true);
+          } else {
+            editor.setReadOnly(false);
+            let timeout;
+            editor.on("input", () => {
+              clearTimeout(timeout);
+              timeout = setTimeout(() => {
+
+                const code = editor.getValue();
+                socket.send(JSON.stringify({ type: "codeblock", data: code }));
+              }, 500);
+            });
+          }
+        }
+
+        if (data.type === "codeblock") {
+            const currentCode = editor.getValue();
+            const receivedCode = data.data;
+            if (currentCode !== receivedCode) {
+                editor.setValue(receivedCode);
+                editor.selection.clearSelection();
+            }
+            }
+      });
+
+      function handleHomeClick() {
+        socket.close();
+        location.href = '/';
+      }
+    </script>
+  </body>
+</html>
