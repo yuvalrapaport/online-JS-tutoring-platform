@@ -32,22 +32,10 @@
       editor.setTheme("ace/theme/twilight");
       editor.session.setMode("ace/mode/javascript");
 
-      // debounce function
-      function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-          const later = () => {
-            timeout = null;
-            func(...args);
-          };
-          clearTimeout(timeout);
-          timeout = setTimeout(later, wait);
-        };
-      }
-
       socket.addEventListener("open", (event) => {
         console.log("Connected to server");
         socket.send(JSON.stringify({ type: "msg", data: document.getElementById("scriptneed").ariaPlaceholder }));
+        
       });
 
       socket.addEventListener("message", (event) => {
@@ -58,14 +46,15 @@
             editor.setReadOnly(true);
           } else {
             editor.setReadOnly(false);
+            let timeout;
+            editor.on("input", () => {
+              clearTimeout(timeout);
+              timeout = setTimeout(() => {
 
-            // rate-limit the editor's input event
-            const debouncedInputHandler = debounce(() => {
-              const code = editor.getValue();
-              socket.send(JSON.stringify({ type: "codeblock", data: code }));
-            }, 500);
-
-            editor.on("input", debouncedInputHandler);
+                const code = editor.getValue();
+                socket.send(JSON.stringify({ type: "codeblock", data: code }));
+              }, 500);
+            });
           }
         }
 
@@ -76,7 +65,7 @@
                 editor.setValue(receivedCode);
                 editor.selection.clearSelection();
             }
-        }
+            }
       });
 
       function handleHomeClick() {
