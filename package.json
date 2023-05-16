@@ -2,12 +2,12 @@
   "name": "moveo_task",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/index.js",
   "engines": {
     "node": "14.x"
   },
   "scripts": {
-     "dev": "nodemon server/index.ts",
+    "dev": "nodemon server/index.ts",
     "build": "yarn migrate:deploy && tsc",
      "start": "node server/index.js",
     "migrate:dev": "prisma migrate dev",
@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "sqlite3": "^5.0.2",
     "ws": "^8.13.0",
-     "yarn": "^1.22.19"
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "nodemon": "^2.0.12",
@@ -29,6 +29,4 @@
   "prisma": {
     "seed": "node prisma/seed.js"
   }
-
- 
 }
