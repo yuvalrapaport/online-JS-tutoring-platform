@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "server/index.js",
-  "engines": {
-    "node": "v18.16.0"
-  },
+  
   "scripts": {
     "dev": "nodemon server/index.ts",
     "build": "yarn migrate:deploy",
