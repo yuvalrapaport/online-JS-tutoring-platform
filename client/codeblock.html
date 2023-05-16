@@ -53,7 +53,7 @@
 
                 const code = editor.getValue();
                 socket.send(JSON.stringify({ type: "codeblock", data: code }));
-              }, 500);
+              }, 800);
             });
           }
         }
