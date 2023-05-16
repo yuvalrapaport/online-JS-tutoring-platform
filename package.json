@@ -7,9 +7,13 @@
     "node": "14.x"
   },
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "nodemon index.js",
-    "build": ""
+     "dev": "nodemon server/index.ts",
+    "build": "yarn migrate:deploy && tsc",
+     "start": "node server/index.js",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:status": "prisma migrate status",
+    "generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.14.0",
