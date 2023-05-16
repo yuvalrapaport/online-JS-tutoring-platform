@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "nodemon server/index.ts",
-    "build": "yarn migrate:deploy && tsc",
+    "build": "yarn migrate:deploy",
      "start": "node server/index.js",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
