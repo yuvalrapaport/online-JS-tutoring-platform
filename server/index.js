@@ -137,7 +137,7 @@ wss.on("connection", (ws) => {
   });
 });
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 server.listen(port, async () => {
-  console.log("http://localhost:3000/");
+  console.log("running on port: " + port);
 });
